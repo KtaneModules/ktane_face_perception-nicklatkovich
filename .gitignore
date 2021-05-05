@@ -29,4 +29,5 @@ Models/*
 # Face Perception
 !Assets/FacePerception.meta
 !Assets/FacePerception/
+!Manual/img/Face Perception/
 !Manual/img/Component/Face Perception.svg

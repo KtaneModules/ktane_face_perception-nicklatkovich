@@ -10,6 +10,20 @@
     <link rel="stylesheet" type="text/css" href="css/normalize.css" />
     <link rel="stylesheet" type="text/css" href="css/main.css" />
     <script src="js/ktane-utils.js"></script>
+    <style>
+        table {
+            margin: auto;
+        }
+
+        #identification-table td {
+            width: 132px;
+            text-align: center;
+        }
+
+        #identification-table img {
+            width: 80%;
+        }
+    </style>
 </head>
 
 <body>
@@ -26,8 +40,92 @@
                 <p>The module consists of a "NEXT" button and a screen that displays a face and a number.</p>
 
                 <p>Remember this face and number. Then press "NEXT" button. You will see a different face and a different number. Continue to press "NEXT", remembering the faces and numbers, until the screen changes to a list of names. Using the tables below, match the faces you see with the names. Count the sum of all remembered numbers for each name. Press five names in decreasing order of the sum. If several names have the same sum, then the name that got this sum first should be pressed first. In case of an incorrect answer, you will receive a strike and the module will be reset.</p>
+
+                <p>Sometimes you will see letters instead of digits. Use the table below to convert this letter to a digit. If the number obtained from the table is greater than 9, then replace the letter with the last digit of the obtained number.</p>
+
+                <table>
+                    <tr>
+                        <td>Letter</td>
+                        <td>Value</td>
+                    </tr>
+                    <tr>
+                        <td>A</td>
+                        <td>Indicators count</td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>Lit indicators count</td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>Unlit indicators count</td>
+                    </tr>
+                    <tr>
+                        <td>D</td>
+                        <td>Port types count</td>
+                    </tr>
+                    <tr>
+                        <td>E</td>
+                        <td>Ports count</td>
+                    </tr>
+                    <tr>
+                        <td>F</td>
+                        <td>Last letter of serial # (1-26)</td>
+                    </tr>
+                    <tr>
+                        <td>G</td>
+                        <td>First letter of serial # (1-26)</td>
+                    </tr>
+                    <tr>
+                        <td>H</td>
+                        <td>Sum of serial number digits</td>
+                    </tr>
+                    <tr>
+                        <td>I</td>
+                        <td>Port plates count</td>
+                    </tr>
+                </table>
             </div>
-            <div class="page-footer relative-footer">Page 1 of 1</div>
+            <div class="page-footer relative-footer">Page 1 of 2</div>
+        </div>
+        <div class="page page-bg-01">
+            <div class="page-header">
+                <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
+                <span class="page-header-section-title">Face Perception</span>
+            </div>
+            <div class="page-content">
+                <table id="identification-table">
+                    <tr>
+                        <td>Hairstyle</td>
+                        <td>Wild<img src="img/Face Perception/wild_hair_face.svg" /></td>
+                        <td>Raised<img src="img/Face Perception/empty_face.svg" /></td>
+                        <td>Combed<img src="img/Face Perception/empty_face.svg" /></td>
+                        <td>Long<img src="img/Face Perception/empty_face.svg" /></td>
+                    </tr>
+                    <tr>
+                        <td>Haircolor</td>
+                        <td>Black<img src="img/Face Perception/wild_hair_face.svg" /></td>
+                        <td>Blonde<img src="img/Face Perception/blonde_hair_face.svg" /></td>
+                        <td>Red<img src="img/Face Perception/red_hair_face.svg" /></td>
+                        <td>White<img src="img/Face Perception/white_hair_face.svg" /></td>
+                    </tr>
+                    <tr>
+                        <td>Beard</td>
+                        <td>Smooth-faced<img src="img/Face Perception/empty_face.svg" /></td>
+                        <td>Mustache<img src="img/Face Perception/empty_face.svg" /></td>
+                        <td>Goatee<img src="img/Face Perception/empty_face.svg" /></td>
+                        <td>Full beard<img src="img/Face Perception/empty_face.svg" /></td>
+                    </tr>
+                    <tr>
+                        <td>Accessory / Glasses</td>
+                        <td>None<img src="img/Face Perception/empty_face.svg" /></td>
+                        <td>Round gl.<img src="img/Face Perception/empty_face.svg" /></td>
+                        <td>Square gl.<img src="img/Face Perception/empty_face.svg" /></td>
+                        <td>Headphones<img src="img/Face Perception/empty_face.svg" /></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="page-footer relative-footer">Page 2 of 2</div>
         </div>
     </div>
 </body>
