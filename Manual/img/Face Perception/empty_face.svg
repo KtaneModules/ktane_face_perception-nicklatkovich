@@ -57,7 +57,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -84,8 +84,7 @@
        transform="scale(0.26458333)" />
     <path
        id="path853"
-       style="fill:#000000;stroke:#ffffff;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
-       d="M 128 22.728516 C 98.416198 22.728516 88.892561 37.881274 83.841797 44.447266 C 78.791037 51.013257 72.73013 108.59152 86.367188 139.90625 C 100.00424 171.22098 128 176.27148 128 176.27148 C 128 176.27148 155.99576 171.22098 169.63281 139.90625 C 183.26987 108.59152 177.20896 51.013257 172.1582 44.447266 C 167.10744 37.881274 157.58381 22.728516 128 22.728516 z "
-       transform="scale(0.26458333)" />
+       style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:1.05833;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 33.866666,11.013167 c -7.827381,0 -10.347176,4.009167 -11.683524,5.746419 -1.336347,1.737252 -2.939962,16.9715 0.668176,25.256856 3.608137,8.285355 11.015348,9.621633 11.015348,9.621633 0,0 7.407212,-1.336278 11.015348,-9.621633 3.608138,-8.285356 2.004523,-23.519604 0.668176,-25.256856 -1.336347,-1.737252 -3.856141,-5.746419 -11.683524,-5.746419 z" />
   </g>
 </svg>
