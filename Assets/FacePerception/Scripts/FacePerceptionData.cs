@@ -125,6 +125,9 @@ public static class FacePerceptionData {
 		public override string ToString() {
 			return string.Format("{0}: {1} {2} hair, {3}, {4}", name, hairColors[color], hairStyles[style], beards[beard], accessories[accessory]);
 		}
+		public static Person GenerateRandom() {
+			return new Person(Random.Range(0, 4), Random.Range(0, 4), Random.Range(0, 4), Random.Range(0, 4), "RANDOM");
+		}
 	}
 
 	public struct Stage {
@@ -155,9 +158,9 @@ public static class FacePerceptionData {
 		attrs /= 4;
 		int beard = attrs % 4;
 		attrs /= 4;
-		int color = attrs % 4;
+		int style = attrs % 4;
 		attrs /= 4;
-		return new Person(attrs % 4, color, beard, accessory, name);
+		return new Person(style, attrs % 4, beard, accessory, name);
 	}
 
 	public static void Generate(out Stage[] stages, out Person[] persons, out string[] answer) {
@@ -167,7 +170,10 @@ public static class FacePerceptionData {
 		for (int i = 0; i < 6; i++) {
 			string name = allNames.PickRandom();
 			allNames.Remove(name);
+			Debug.Log(name);
+			Debug.Log(_data[name].Join(","));
 			HashSet<int> posAttrs = GetPossibleAttributes(name);
+			foreach (int a in posAttrs) Debug.Log(a);
 			if (posAttrs.All(s => usedAttrs.Contains(s))) break;
 			if (preresult.Values.Any(s => s.Where(k => !posAttrs.Contains(k)).Count() == 0)) break;
 			foreach (string preresultName in preresult.Keys.ToArray()) {
