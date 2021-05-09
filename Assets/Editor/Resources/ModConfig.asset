@@ -14,7 +14,8 @@ MonoBehaviour:
   id: face_perception
   title: Face Perception
   author: NickLatkovich
-  description: '-'
+  description: The module in which you need to identify people by their appearance
+    and sort them by the number of points scored.
   version: 0.1.0
   outputFolder: build
-  previewImage: {fileID: 0}
+  previewImage: {fileID: 2800000, guid: 023c5842558802f4b96c61c7e1ef69d3, type: 3}

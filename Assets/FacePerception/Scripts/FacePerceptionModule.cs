@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using KModkit;
 using Random = UnityEngine.Random;
 
 public class FacePerceptionModule : MonoBehaviour {
@@ -10,6 +11,7 @@ public class FacePerceptionModule : MonoBehaviour {
 
 	public KMSelectable Selectable;
 	public KMAudio Audio;
+	public KMBombInfo BombInfo;
 	public KMBombModule Module;
 	public KMSelectable Face;
 	public TextMesh Score;
@@ -72,6 +74,7 @@ public class FacePerceptionModule : MonoBehaviour {
 	private FacePerceptionData.Stage[] stages;
 	private FacePerceptionData.Person[] persons;
 	private Coroutine fakeFaces;
+	private string[] replacements = Enumerable.Range(0, 10).Select(_ => "").ToArray();
 	private List<NameComponent> names = new List<NameComponent>();
 	private Dictionary<string, int> scores;
 
@@ -92,9 +95,9 @@ public class FacePerceptionModule : MonoBehaviour {
 		StopCoroutine(fakeFaces);
 		activated = true;
 		FacePerceptionData.Generate(out stages, out persons, out answer, out scores);
-		Debug.LogFormat("[Face Perception #{0}] Persons:\n\t{1}", moduleId, persons.Select(p => p.ToString()).Join("\n\t"));
-		Debug.LogFormat("[Face Perception #{0}] Stages:\n\t{1}", moduleId, stages.Select(s => string.Format("{0}: {1}", s.person.name, s.score)).Join("\n\t"));
-		Debug.LogFormat("[Face Perception #{0}] Scores:\n\t{1}", moduleId, answer.Select(name => string.Format("{0}: {1}", name, scores[name])).Join("\n\t"));
+		foreach (FacePerceptionData.Person person in persons) Debug.LogFormat("[Face Perception #{0}] {1}", moduleId, person.ToString());
+		for (int i = 0; i < stages.Length; i++) Debug.LogFormat("[Face Perception #{0}] Stage #{1}: {2} = {3}", moduleId, i + 1, stages[i].person.name, stages[i].score);
+		foreach (string name in answer) Debug.LogFormat("[Face Perception #{0}] {1}'s score is {2}", moduleId, name, scores[name]);
 		Debug.LogFormat("[Face Perception #{0}] Answer: {1}", moduleId, answer.Join(", "));
 		for (int i = 0; i < persons.Length; i++) {
 			NameComponent Name = Instantiate(NamePrefab);
@@ -108,6 +111,15 @@ public class FacePerceptionModule : MonoBehaviour {
 			Name.Selectable.OnInteract += () => OnNamePressed(Name);
 			names.Add(Name);
 		}
+		replacements[BombInfo.GetIndicators().Count() % 10] += "A";
+		replacements[BombInfo.GetOnIndicators().Count() % 10] += "B";
+		replacements[BombInfo.GetOffIndicators().Count() % 10] += "C";
+		replacements[new HashSet<string>(BombInfo.GetPorts()).Count % 10] += "D";
+		replacements[BombInfo.GetPorts().Count() % 10] += "E";
+		replacements[(BombInfo.GetSerialNumberLetters().Last() - 'A' + 1) % 10] += "F";
+		replacements[(BombInfo.GetSerialNumberLetters().First() - 'A' + 1) % 10] += "G";
+		replacements[BombInfo.GetSerialNumberNumbers().Sum() % 10] += "H";
+		replacements[BombInfo.GetPortPlateCount() % 10] += "I";
 		Face.OnInteract += OnFacePressed;
 		Reset.OnInteract += OnResetPressed;
 		RenderStage();
@@ -133,6 +145,9 @@ public class FacePerceptionModule : MonoBehaviour {
 		if (!nameComponent.active) return false;
 		if (nameComponent.text != answer[submittedNamesCount]) {
 			Module.HandleStrike();
+			List<string> submittedNames = new List<string>(answer.Take(submittedNamesCount));
+			submittedNames.Add(nameComponent.text);
+			Debug.LogFormat("[Face Perception #{0}] Submitted wrong answer: ", moduleId, submittedNames.Join(", "));
 			if (!readyToReset) {
 				Score.text = "RESET";
 				List<KMSelectable> children = new List<KMSelectable>(Selectable.Children);
@@ -145,6 +160,7 @@ public class FacePerceptionModule : MonoBehaviour {
 			submittedNamesCount++;
 			nameComponent.active = false;
 			if (submittedNamesCount == answer.Length) {
+				Debug.LogFormat("[Face Perception #{0}] Module solved", moduleId);
 				Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
 				readyToReset = false;
 				Score.text = "SOLVED";
@@ -159,6 +175,7 @@ public class FacePerceptionModule : MonoBehaviour {
 
 	private bool OnResetPressed() {
 		if (!readyToReset) return false;
+		Debug.LogFormat("[Face Perception #{0}] Reset pressed", moduleId);
 		Audio.PlaySoundAtTransform("FacePerceptionResetPressed", Reset.transform);
 		readyToReset = false;
 		FaceContainer.SetActive(true);
@@ -179,7 +196,9 @@ public class FacePerceptionModule : MonoBehaviour {
 	private void RenderStage() {
 		FacePerceptionData.Person person = stages[stage].person;
 		RenderPerson(person);
-		Score.text = stages[stage].score.ToString();
+		foreach (char c in stages[stage].score.ToString()) {
+		}
+		Score.text = stages[stage].score.ToString().Select(c => replacements[c - '0'].Length > 0 && Random.Range(0, 3) == 0 ? replacements[c - '0'].PickRandom() : c).Join("");
 	}
 
 	private void SetTexture(Renderer renderer, Texture texture) {

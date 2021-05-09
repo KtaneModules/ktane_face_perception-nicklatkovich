@@ -23,6 +23,10 @@
         #identification-table img {
             width: 96px;
         }
+
+        .names-table {
+            font-size: 14px;
+        }
     </style>
     <script>
         const data = [
@@ -154,7 +158,7 @@
 
 <body>
     <div class="section">
-        <div class="page page-bg-01">
+        <div class="page page-bg-03">
             <div class="page-header">
                 <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
                 <span class="page-header-section-title">Face Perception</span>
@@ -163,11 +167,11 @@
                 <img src="img/Component/Face Perception.svg" class="diagram">
                 <h2>On the Subject of Face Perception</h2>
                 <p class="flavour-text">I hope you have no prosopagnosia.</p>
-                <p>The module consists of a "NEXT" button and a screen that displays a face and a number.</p>
+                <p>The module consists of a large display with a face rendered on it and a small display with this person's score.</p>
 
-                <p>Remember this face and number. Then press "NEXT" button. You will see a different face and a different number. Continue to press "NEXT", remembering the faces and numbers, until the screen changes to a list of names. Using the tables below, match the faces you see with the names. Count the sum of all remembered numbers for each name. Press five names in decreasing order of the sum. If several names have the same sum, then the name that got this sum first should be pressed first. In case of an incorrect answer, you will receive a strike and the module will be reset.</p>
+                <p>Remember this face and the score. Then press the large display. You will see a different face and a different score. Continue to press the large display, remembering the faces and scores, until the screen changes to a list of names. Using the tables below, match the faces you see with the names. Count the total score for each name. Press all names in decreasing order of theirs total scores. If several names have the same total score, then the name that got this score first should be pressed first. In case of an incorrect answer, you will receive a strike and button with label "RESET" will appear. When you press this button, the module will be restarted, but the correctly selected names will remain selected.</p>
 
-                <p>Sometimes you will see letters instead of digits. Use the table below to convert this letter to a digit. If the number obtained from the table is greater than 9, then replace the letter with the last digit of the obtained number.</p>
+                <p>Sometimes you will see letters instead of digits on the small display. Use the table below to convert this letter to a digit. If the number obtained from the table is greater than 9, then replace the letter with the last digit of the obtained number.</p>
 
                 <table>
                     <tr>
@@ -214,7 +218,7 @@
             </div>
             <div class="page-footer relative-footer">Page 1 of 5</div>
         </div>
-        <div class="page page-bg-01">
+        <div class="page page-bg-04">
             <div class="page-header">
                 <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
                 <span class="page-header-section-title">Face Perception</span>
@@ -259,31 +263,31 @@
                 <span class="page-header-section-title">Face Perception</span>
             </div>
             <div class="page-content">
-                <table>
+                <table class="names-table">
                     <tbody id="names-1"></tbody>
                 </table>
             </div>
             <div class="page-footer relative-footer">Page 3 of 5</div>
         </div>
-        <div class="page page-bg-01">
+        <div class="page page-bg-05">
             <div class="page-header">
                 <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
                 <span class="page-header-section-title">Face Perception</span>
             </div>
             <div class="page-content">
-                <table>
+                <table class="names-table">
                     <tbody id="names-2"></tbody>
                 </table>
             </div>
             <div class="page-footer relative-footer">Page 4 of 5</div>
         </div>
-        <div class="page page-bg-01">
+        <div class="page page-bg-07">
             <div class="page-header">
                 <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
                 <span class="page-header-section-title">Face Perception</span>
             </div>
             <div class="page-content">
-                <table>
+                <table class="names-table">
                     <tbody id="names-3"></tbody>
                 </table>
             </div>

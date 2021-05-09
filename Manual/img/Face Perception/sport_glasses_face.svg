@@ -13,7 +13,10 @@
    version="1.1"
    id="svg8"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
-   sodipodi:docname="sport_glasses_face.svg">
+   sodipodi:docname="sport_glasses_face.svg"
+   inkscape:export-filename="E:\dev\ktane_face_perception\Assets\FacePerception\Sprites\sport_glasses.png"
+   inkscape:export-xdpi="96.000008"
+   inkscape:export-ydpi="96.000008">
   <defs
      id="defs2">
     <pattern
@@ -31,9 +34,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="59.609429"
-     inkscape:cy="145.12017"
+     inkscape:zoom="5.6"
+     inkscape:cx="88.979439"
+     inkscape:cy="148.62333"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -100,7 +103,7 @@
        id="path911" />
     <g
        id="g931"
-       transform="translate(102.36609,33.711952)">
+       transform="translate(102.36609,32.581232)">
       <path
          style="fill:none;stroke:#ffffff;stroke-width:2.11667;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          d="m -80.201822,-3.4490326 c 0,0 7.299661,0.5669648 8.976934,1.6300222 1.677273,1.06305757 1.370163,1.72451635 0.496094,3.7325149"

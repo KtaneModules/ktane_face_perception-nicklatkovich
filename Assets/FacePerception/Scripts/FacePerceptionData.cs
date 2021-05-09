@@ -170,10 +170,7 @@ public static class FacePerceptionData {
 		for (int i = 0; i < 6; i++) {
 			string name = allNames.PickRandom();
 			allNames.Remove(name);
-			Debug.Log(name);
-			Debug.Log(_data[name].Join(","));
 			HashSet<int> posAttrs = GetPossibleAttributes(name);
-			foreach (int a in posAttrs) Debug.Log(a);
 			if (posAttrs.All(s => usedAttrs.Contains(s))) break;
 			if (preresult.Values.Any(s => s.Where(k => !posAttrs.Contains(k)).Count() == 0)) break;
 			foreach (string preresultName in preresult.Keys.ToArray()) {

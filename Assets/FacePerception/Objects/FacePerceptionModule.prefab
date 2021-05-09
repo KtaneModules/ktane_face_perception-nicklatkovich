@@ -1182,6 +1182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Selectable: {fileID: 114524317516929256}
   Audio: {fileID: 114065994084937976}
+  BombInfo: {fileID: 114932178122956038}
   Module: {fileID: 114669840182774732}
   Face: {fileID: 114101116329090500}
   Score: {fileID: 102473963682765150}
