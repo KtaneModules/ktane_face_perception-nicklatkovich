@@ -107,7 +107,7 @@ public static class FacePerceptionData {
 	private static string[] hairColors = new string[4] { "black", "blonde", "red", "white" };
 	private static string[] hairStyles = new string[4] { "wild", "raised", "combed", "long" };
 	private static string[] beards = new string[4] { "smooth-faced", "mustache", "goatee", "full beard" };
-	private static string[] accessories = new string[4] { "no accessories", "round glasses", "square glasses", "headphones" };
+	private static string[] accessories = new string[4] { "no glasses", "round glasses", "square glasses", "sport glasses" };
 
 	public struct Person {
 		public int style;
@@ -163,7 +163,7 @@ public static class FacePerceptionData {
 		return new Person(style, attrs % 4, beard, accessory, name);
 	}
 
-	public static void Generate(out Stage[] stages, out Person[] persons, out string[] answer) {
+	public static void Generate(out Stage[] stages, out Person[] persons, out string[] answer, out Dictionary<string, int> scores) {
 		HashSet<string> allNames = new HashSet<string>(_data.Keys);
 		Dictionary<string, HashSet<int>> preresult = new Dictionary<string, HashSet<int>>();
 		HashSet<int> usedAttrs = new HashSet<int>();
@@ -184,23 +184,28 @@ public static class FacePerceptionData {
 			preresult[name] = posAttrs;
 		}
 		persons = preresult.Keys.Select(name => GeneratePerson(name, preresult[name].PickRandom())).ToArray();
-		stages = new Stage[Random.Range(4, 10) + persons.Length];
-		Dictionary<string, int> scores = new Dictionary<string, int>();
+		Stage?[] _stages = new Stage?[Random.Range(4, 10) + persons.Length];
+		Dictionary<string, int> _scores = new Dictionary<string, int>();
 		for (int i = 0; i < persons.Length; i++) {
 			int score = Random.Range(10, 100);
-			stages[i] = new Stage(persons[i], score);
-			scores[persons[i].name] = score;
+			_stages[i] = new Stage(persons[i], score);
+			_scores[persons[i].name] = score;
 		}
-		for (int i = persons.Length; i < stages.Length; i++) {
-			Person person = persons.PickRandom();
-			if (Random.Range(0, 3) == 0) stages[i] = new Stage(person, Random.Range(10, 100));
+		_stages = _stages.Shuffle();
+		for (int i = 0; i < _stages.Length; i++) {
+			if (_stages[i] != null) continue;
+			Person person = persons.Where(p => (
+				(i == 0 || _stages[i - 1] == null || _stages[i - 1].Value.person.name != p.name) &&
+				(i == _stages.Length - 1 || _stages[i + 1] == null || _stages[i + 1].Value.person.name != p.name)
+			)).PickRandom();
+			if (Random.Range(0, 3) == 0) _stages[i] = new Stage(person, Random.Range(10, 100));
 			else {
-				int curPersonScore = scores[person.name];
-				IEnumerable<int> posScores = scores.Values.Select(v => v - curPersonScore).Where(v => v >= 10 && v < 100);
-				stages[i] = new Stage(person, posScores.Count() > 0 ? posScores.PickRandom() : Random.Range(10, 100));
+				int curPersonScore = _scores[person.name];
+				IEnumerable<int> posScores = _scores.Values.Select(v => v - curPersonScore).Where(v => v >= 10 && v < 100);
+				_stages[i] = new Stage(person, posScores.Count() > 0 ? posScores.PickRandom() : Random.Range(10, 100));
 			}
 		}
-		stages = stages.Shuffle();
+		stages = _stages.Select(v => v.Value).ToArray();
 		Dictionary<string, KeyValuePair<int, int>> answerCalculator = new Dictionary<string, KeyValuePair<int, int>>();
 		for (int i = 0; i < stages.Length; i++) {
 			Stage stage = stages[i];
@@ -214,5 +219,7 @@ public static class FacePerceptionData {
 			if (aScore == bScore) return answerCalculator[b].Value - answerCalculator[a].Value;
 			return bScore - aScore;
 		});
+		scores = new Dictionary<string, int>();
+		foreach (string name in answer) scores[name] = answerCalculator[name].Key;
 	}
 }

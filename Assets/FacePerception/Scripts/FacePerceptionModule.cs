@@ -1,12 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class FacePerceptionModule : MonoBehaviour {
 	private static int moduleIdCounter = 1;
 
 	public KMSelectable Selectable;
+	public KMAudio Audio;
 	public KMBombModule Module;
 	public KMSelectable Face;
 	public TextMesh Score;
@@ -55,7 +58,7 @@ public class FacePerceptionModule : MonoBehaviour {
 
 	public Texture RoundGlassesSprite;
 	public Texture SquareGlassesSprite;
-	public Texture HeadphonesSprite;
+	public Texture SportGlassesSprite;
 
 	public Texture NoneTexture;
 	public NameComponent NamePrefab;
@@ -70,6 +73,7 @@ public class FacePerceptionModule : MonoBehaviour {
 	private FacePerceptionData.Person[] persons;
 	private Coroutine fakeFaces;
 	private List<NameComponent> names = new List<NameComponent>();
+	private Dictionary<string, int> scores;
 
 	private void Start() {
 		moduleId = moduleIdCounter++;
@@ -87,9 +91,10 @@ public class FacePerceptionModule : MonoBehaviour {
 	private void Activate() {
 		StopCoroutine(fakeFaces);
 		activated = true;
-		FacePerceptionData.Generate(out stages, out persons, out answer);
+		FacePerceptionData.Generate(out stages, out persons, out answer, out scores);
 		Debug.LogFormat("[Face Perception #{0}] Persons:\n\t{1}", moduleId, persons.Select(p => p.ToString()).Join("\n\t"));
 		Debug.LogFormat("[Face Perception #{0}] Stages:\n\t{1}", moduleId, stages.Select(s => string.Format("{0}: {1}", s.person.name, s.score)).Join("\n\t"));
+		Debug.LogFormat("[Face Perception #{0}] Scores:\n\t{1}", moduleId, answer.Select(name => string.Format("{0}: {1}", name, scores[name])).Join("\n\t"));
 		Debug.LogFormat("[Face Perception #{0}] Answer: {1}", moduleId, answer.Join(", "));
 		for (int i = 0; i < persons.Length; i++) {
 			NameComponent Name = Instantiate(NamePrefab);
@@ -110,6 +115,7 @@ public class FacePerceptionModule : MonoBehaviour {
 
 	private bool OnFacePressed() {
 		if (!activated) return false;
+		Audio.PlaySoundAtTransform("FacePerceptionStageChanged", Face.transform);
 		stage++;
 		if (stage == stages.Length) {
 			FaceContainer.SetActive(false);
@@ -136,22 +142,24 @@ public class FacePerceptionModule : MonoBehaviour {
 				readyToReset = true;
 			}
 		} else {
-			readyToReset = false;
 			submittedNamesCount++;
 			nameComponent.active = false;
 			if (submittedNamesCount == answer.Length) {
+				Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
+				readyToReset = false;
 				Score.text = "SOLVED";
 				NamesContainer.SetActive(false);
 				FaceContainer.SetActive(true);
 				fakeFaces = StartCoroutine(FakeFaces(1f, 1.1f));
 				Module.HandlePass();
-			}
+			} else Audio.PlaySoundAtTransform("FacePerceptionNamePressed", nameComponent.transform);
 		}
 		return false;
 	}
 
 	private bool OnResetPressed() {
 		if (!readyToReset) return false;
+		Audio.PlaySoundAtTransform("FacePerceptionResetPressed", Reset.transform);
 		readyToReset = false;
 		FaceContainer.SetActive(true);
 		NamesContainer.SetActive(false);
@@ -198,6 +206,6 @@ public class FacePerceptionModule : MonoBehaviour {
 	}
 
 	private Texture GetAccessoryTexture(int type) {
-		return new Texture[] { null, RoundGlassesSprite, SquareGlassesSprite, HeadphonesSprite }[type];
+		return new Texture[] { null, RoundGlassesSprite, SquareGlassesSprite, SportGlassesSprite }[type];
 	}
 }

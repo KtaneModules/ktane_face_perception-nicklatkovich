@@ -1181,6 +1181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Selectable: {fileID: 114524317516929256}
+  Audio: {fileID: 114065994084937976}
   Module: {fileID: 114669840182774732}
   Face: {fileID: 114101116329090500}
   Score: {fileID: 102473963682765150}
@@ -1232,7 +1233,7 @@ MonoBehaviour:
     type: 3}
   RoundGlassesSprite: {fileID: 2800000, guid: ec8b9c4c457f45448b77badd3f5283d1, type: 3}
   SquareGlassesSprite: {fileID: 2800000, guid: 3dbe4708e4c328641990af27d3a88b75, type: 3}
-  HeadphonesSprite: {fileID: 2800000, guid: efb5553ad7899424a81bf443a773b945, type: 3}
+  SportGlassesSprite: {fileID: 2800000, guid: 8186fed635003a74e94a8e31961f1e2e, type: 3}
   NoneTexture: {fileID: 2800000, guid: fcc96ce7bb21bce48896e4cdffdc0a38, type: 3}
   NamePrefab: {fileID: 114089698320479572, guid: 72d3896846156a64e835164ae46a6d47,
     type: 2}
