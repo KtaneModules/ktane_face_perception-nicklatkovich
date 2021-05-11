@@ -213,7 +213,7 @@ public static class FacePerceptionData {
 		Array.Sort(answer, (string a, string b) => {
 			int aScore = answerCalculator[a].Key;
 			int bScore = answerCalculator[b].Key;
-			if (aScore == bScore) return answerCalculator[b].Value - answerCalculator[a].Value;
+			if (aScore == bScore) return answerCalculator[a].Value - answerCalculator[b].Value;
 			return bScore - aScore;
 		});
 		scores = new Dictionary<string, int>();
