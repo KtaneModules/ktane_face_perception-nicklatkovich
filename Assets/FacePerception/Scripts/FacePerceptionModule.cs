@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Text.RegularExpressions;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +8,13 @@ using Random = UnityEngine.Random;
 
 public class FacePerceptionModule : MonoBehaviour {
 	private static int moduleIdCounter = 1;
+
+	public readonly string TwitchHelpMessage = new string[] {
+		"\"!{0} face\" - press large display",
+		"\"!{0} name1 name2\" - press names",
+		"\"!{0} reset\" - press reset button",
+		"use carefully: \"!{0} skip\" - skip all faces",
+	}.Join(" | ");
 
 	public KMSelectable Selectable;
 	public KMAudio Audio;
@@ -187,6 +194,81 @@ public class FacePerceptionModule : MonoBehaviour {
 		return false;
 	}
 
+	private IEnumerator ProcessTwitchCommand(string command) {
+		command = command.Trim().ToLower();
+		if (command == "next") {
+			yield return null;
+			if (stage >= stages.Length) {
+				yield return "sendtochat {0}, !{1}: face not present on module";
+				yield break;
+			}
+			yield return new KMSelectable[] { Face };
+			yield break;
+		}
+		if (command == "reset") {
+			yield return null;
+			if (!readyToReset) {
+				yield return "sendtochat {0}, !{1}: reset button not active";
+				yield break;
+			}
+			yield return new KMSelectable[] { Reset };
+			yield break;
+		}
+		if (command == "skip") {
+			yield return null;
+			if (stage >= stages.Length) {
+				yield return "sendtochat {0}, !{1}: faces not present on module";
+				yield break;
+			}
+			int pressesCount = stages.Length - stage;
+			yield return Enumerable.Range(0, pressesCount).Select(_ => Face).ToArray();
+			yield break;
+		}
+		if (!Regex.IsMatch(command, "^[a-z ]+$")) yield break;
+		string[] names = command.Split(' ').Where(s => s != "").ToArray();
+		if (names.Length != new HashSet<string>(names).Count) {
+			yield return "sendtochat {0}, !{1}: duplicate names provided";
+			yield break;
+		}
+		if (names.Length > 6) {
+			yield return "sendtochat {0}, !{1}: too much names provided";
+			yield break;
+		}
+		yield return null;
+		if (stage < stages.Length) {
+			yield return "sendtochat {0}, !{1}: names not present on module";
+			yield break;
+		}
+		Dictionary<string, NameComponent> components = new Dictionary<string, NameComponent>();
+		HashSet<string> notFoundNames = new HashSet<string>(names);
+		HashSet<string> notActiveNames = new HashSet<string>(names);
+		foreach (NameComponent nameComponent in this.names) {
+			notFoundNames.Remove(nameComponent.text.ToLower());
+			if (nameComponent.active) notActiveNames.Remove(nameComponent.text.ToLower());
+			components[nameComponent.text.ToLower()] = nameComponent;
+		}
+		if (notFoundNames.Count > 0) {
+			yield return "sendtochat {0}, !{1}: name(s) " + notFoundNames.Join(", ") + " not found";
+			yield break;
+		}
+		if (notActiveNames.Count > 0) {
+			yield return "sendtochat {0}, !{1}: name(s) " + notActiveNames.Join(", ") + " already pressed";
+			yield break;
+		}
+		yield return names.Select(n => components[n].Selectable).ToArray();
+	}
+
+	public void TwitchHandleForcedSolve() {
+		Debug.LogFormat("[Face Perception #{0}] Module force-solved", moduleId);
+		Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
+		readyToReset = false;
+		Score.text = "SOLVED";
+		NamesContainer.SetActive(false);
+		FaceContainer.SetActive(true);
+		fakeFaces = StartCoroutine(FakeFaces(1f, 1.1f));
+		Module.HandlePass();
+	}
+
 	private void RenderPerson(FacePerceptionData.Person person) {
 		SetTexture(HairRenderer, GetHairTexture(person.color, person.style));
 		SetTexture(BeardRenderer, GetBeardTexture(person.color, person.beard));
@@ -196,8 +278,6 @@ public class FacePerceptionModule : MonoBehaviour {
 	private void RenderStage() {
 		FacePerceptionData.Person person = stages[stage].person;
 		RenderPerson(person);
-		foreach (char c in stages[stage].score.ToString()) {
-		}
 		Score.text = stages[stage].score.ToString().Select(c => replacements[c - '0'].Length > 0 && Random.Range(0, 3) == 0 ? replacements[c - '0'].PickRandom() : c).Join("");
 	}
 
