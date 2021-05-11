@@ -152,9 +152,9 @@ public class FacePerceptionModule : MonoBehaviour {
 		if (!nameComponent.active) return false;
 		if (nameComponent.text != answer[submittedNamesCount]) {
 			Module.HandleStrike();
-			List<string> submittedNames = new List<string>(answer.Take(submittedNamesCount));
+			List<string> submittedNames = answer.Take(submittedNamesCount).ToList();
 			submittedNames.Add(nameComponent.text);
-			Debug.LogFormat("[Face Perception #{0}] Submitted wrong answer: ", moduleId, submittedNames.Join(", "));
+			Debug.LogFormat("[Face Perception #{0}] Submitted wrong answer: {1}", moduleId, submittedNames.Join(", "));
 			if (!readyToReset) {
 				Score.text = "RESET";
 				List<KMSelectable> children = new List<KMSelectable>(Selectable.Children);
