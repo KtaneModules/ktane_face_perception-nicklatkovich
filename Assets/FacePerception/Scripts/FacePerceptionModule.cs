@@ -10,10 +10,11 @@ public class FacePerceptionModule : MonoBehaviour {
 	private static int moduleIdCounter = 1;
 
 	public readonly string TwitchHelpMessage = new string[] {
-		"\"!{0} face\" - press large display",
+		"\"!{0} next\" - press large display",
 		"\"!{0} name1 name2\" - press names",
 		"\"!{0} reset\" - press reset button",
-		"use carefully: \"!{0} skip\" - skip all faces",
+		"next commands are unsafe, use only if you are sure what you are doing: \"!{0} skip\" - skip all faces and goes directly to names",
+		"\"!{0} next 2\" - press large display several times",
 	}.Join(" | ");
 
 	public KMSelectable Selectable;
@@ -134,6 +135,7 @@ public class FacePerceptionModule : MonoBehaviour {
 
 	private bool OnFacePressed() {
 		if (!activated) return false;
+		if (stage >= stages.Length) return false;
 		Audio.PlaySoundAtTransform("FacePerceptionStageChanged", Face.transform);
 		stage++;
 		if (stage == stages.Length) {
@@ -196,13 +198,19 @@ public class FacePerceptionModule : MonoBehaviour {
 
 	private IEnumerator ProcessTwitchCommand(string command) {
 		command = command.Trim().ToLower();
-		if (command == "next") {
+		if (command == "next") command = "next 1";
+		if (Regex.IsMatch(command, @"^next +[1-9]\d*$")) {
+			string[] split = command.Split(' ');
+			int times = int.Parse(split[split.Length - 1]);
 			yield return null;
 			if (stage >= stages.Length) {
 				yield return "sendtochat {0}, !{1}: face not present on module";
 				yield break;
 			}
-			yield return new KMSelectable[] { Face };
+			do {
+				yield return new[] { Face };
+				times -= 1;
+			} while (times > 0 && stage < stages.Length);
 			yield break;
 		}
 		if (command == "reset") {

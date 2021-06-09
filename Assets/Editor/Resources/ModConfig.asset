@@ -16,6 +16,6 @@ MonoBehaviour:
   author: NickLatkovich
   description: The module in which you need to identify people by their appearance
     and sort them by the number of points scored.
-  version: 0.1.3
+  version: 0.1.4
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 023c5842558802f4b96c61c7e1ef69d3, type: 3}
